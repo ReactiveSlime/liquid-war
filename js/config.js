@@ -1,0 +1,11 @@
+export const teams = 6;
+export const teamNames = ['Green', 'Blue', 'Red', 'Cyan', 'Yellow', 'Magenta'];
+export const colours = ['#00ff00', '#2633ff', '#ff3333', '#00ffff', '#ffff00', '#ff00ff'];
+export const DOT_MAX_HEALTH = 10;
+export const MAP_COUNT = 46;
+export const RANDOM_MAP_ID = -1;
+export const CUSTOM_MAP_ID = MAP_COUNT;
+export const DEFAULT_TEAM_SIZE_MAX = 1000;
+export const EXPERT_TEAM_SIZE_MAX = 999999999;
+export const DEFAULT_WIDTH = 800;
+export const DEFAULT_HEIGHT = 480;

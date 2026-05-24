@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Liquid Wars">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1b314d"/>
+      <stop offset="100%" stop-color="#0a1018"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#4a90e2" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#4a90e2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="214" r="176" fill="url(#glow)"/>
+  <path d="M256 94c-44 62-116 133-116 223 0 70 52 101 116 101s116-31 116-101c0-90-72-161-116-223Z" fill="#4a90e2"/>
+  <path d="M256 162c-21 31-56 66-56 108 0 34 26 49 56 49s56-15 56-49c0-42-35-77-56-108Z" fill="#ffffff" fill-opacity="0.88"/>
+  <circle cx="172" cy="298" r="28" fill="#00ffb8" fill-opacity="0.88"/>
+  <circle cx="340" cy="298" r="28" fill="#ff4d6d" fill-opacity="0.88"/>
+</svg>

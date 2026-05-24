@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Liquid Wars - Web Remake</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="landingScreen">
+    <div id="landingContainer">
+      <h1>LIQUID WAR</h1>
+      <p id="landingSubtitle">Control the flow. Capture the arena.</p>
+      <div id="landingActions">
+        <button id="singlePlayerBtn" type="button" class="largeBtn">Single Player</button>
+        <button id="multiplayerBtn" type="button" class="largeBtn accentBtn">Multiplayer</button>
+      </div>
+      <p id="mpConnectionStatus" class="mp-status">Connecting to multiplayer server…</p>
+      <div id="customServerLauncher" class="customServerLauncher">
+        <button id="customServerToggleBtn" type="button" class="secondaryBtn">Use Custom Server</button>
+        <div id="customServerPanel" class="customServerPanel" hidden>
+          <label for="customServerUrl">Server URL</label>
+          <input id="customServerUrl" type="url" placeholder="https://your-server.example" autocomplete="url" />
+          <div class="customServerActions">
+            <button id="customServerConnectBtn" type="button" class="secondaryBtn">Connect</button>
+            <button id="customServerCancelBtn" type="button" class="secondaryBtn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mpToast" class="mp-toast" hidden aria-live="polite"></div>
+
+  <div id="startScreen" style="display:none">
+    <div id="startContainer">
+      <h2 id="menuTitle">Single Player</h2>
+      <p id="subtitle" class="menuSubtitle">Configure your battle, then begin.</p>
+
+      <div id="gamesettings">
+        <div id="teamSelect">
+          <label for="teamDropdown">Choose Your Team</label>
+          <select id="teamDropdown"></select>
+        </div>
+
+        <div class="settingsGroup">
+          <div id="sizeSelect">
+            <label for="teamSize">Army Size</label>
+            <input id="teamSize" type="number" value="400" min="5" max="1000">
+            <button id="sizeOverrideBtn" type="button" class="secondaryBtn">Warning: disable the 1000-unit cap</button>
+          </div>
+          <div id="timerSelect">
+            <label for="gameTimer">Time Limit (seconds)</label>
+            <input id="gameTimer" type="number" value="180" min="0" max="3600">
+          </div>
+        </div>
+
+        <div id="mapSelect">
+          <label for="mapDropdown">Built-in Map</label>
+          <select id="mapDropdown"></select>
+          <div id="mapPreviewWrap">
+            <img id="mapPreview" alt="Selected map preview" />
+          </div>
+          <div id="customMapPanel" class="customMapPanel" hidden>
+            <p class="customMapHelp">Choose one collision image, or a collision image plus a separate display image. Opaque pixels become walls; transparent pixels stay open.</p>
+            <label for="customCollisionMap">Collision image</label>
+            <input id="customCollisionMap" type="file" accept="image/*" />
+            <label for="customDisplayMap">Display image (optional)</label>
+            <input id="customDisplayMap" type="file" accept="image/*" />
+            <p id="customMapStatus" class="customMapStatus">Select Custom Map in the dropdown to load your own files.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="multiplayerLobby" class="multiplayer-lobby" hidden>
+        <div class="lobby-header">
+          <p class="lobby-label">Room ID</p>
+          <div class="room-id-row">
+            <code id="roomIdDisplay" class="room-id-code">-</code>
+            <button id="copyRoomIdBtn" type="button" class="secondaryBtn smallCopyBtn">Copy</button>
+          </div>
+          <p id="playerCount" class="player-count">1 player connected</p>
+        </div>
+        <div id="playerList" class="player-list" aria-label="Players in room"></div>
+        <div class="lobby-actions">
+          <button id="lobbyReadyBtn" type="button" class="largeBtn lobbyReadyBtn">Mark as Ready</button>
+          <button id="lobbyStartBtn" type="button" class="largeBtn accentBtn">Start Game</button>
+          <button id="leaveLobbyBtn" type="button" class="secondaryBtn">Leave Room</button>
+        </div>
+      </div>
+
+      <div id="singlePlayerActions" class="start-actions">
+        <button id="startFullscreen" class="secondaryBtn">Fullscreen</button>
+        <a id="creditsBtn" href="credits.html" class="secondaryBtn" target="_blank" rel="noopener noreferrer">Credits</a>
+        <a id="howToPlayBtn" href="how-to-play.html" class="secondaryBtn" target="_blank" rel="noopener noreferrer">How to Play</a>
+        <a id="customMapGuideBtn" href="custom-map-guide.html" class="secondaryBtn" target="_blank" rel="noopener noreferrer">Custom Map Guide</a>
+        <button id="startBtn" class="largeBtn">Begin Battle</button>
+        <button id="backToLandingBtn" type="button" class="secondaryBtn">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modeSelectorOverlay" class="modalOverlay" style="display:none" aria-hidden="true">
+    <div class="modalBox mpModalBox" role="dialog" aria-modal="true" aria-labelledby="modeSelectorTitle">
+      <h2 id="modeSelectorTitle">Multiplayer</h2>
+      <p class="helpModalSubtitle">Create a room to host, or join with a room ID from the host.</p>
+      <div id="lobbyModeSelection" class="mp-mode-actions">
+        <button id="mpCreateRoomBtn" type="button" class="largeBtn accentBtn">Create Room (Host)</button>
+        <button id="mpJoinRoomBtn" type="button" class="largeBtn">Join Room</button>
+        <button id="mpModeBackBtn" type="button" class="secondaryBtn">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="createRoomOverlay" class="modalOverlay" style="display:none" aria-hidden="true">
+    <div class="modalBox mpModalBox" role="dialog" aria-modal="true" aria-labelledby="createRoomTitle">
+      <h2 id="createRoomTitle">Create Room</h2>
+      <label for="hostNameInput">Your name</label>
+      <input id="hostNameInput" type="text" maxlength="24" placeholder="Host" autocomplete="nickname" />
+      <p id="createRoomError" class="error-message" hidden></p>
+      <div class="mp-modal-actions">
+        <button id="createRoomConfirmBtn" type="button" class="largeBtn accentBtn">Create and Host</button>
+        <button id="createRoomCancelBtn" type="button" class="secondaryBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="joinRoomOverlay" class="modalOverlay" style="display:none" aria-hidden="true">
+    <div class="modalBox mpModalBox" role="dialog" aria-modal="true" aria-labelledby="joinRoomTitle">
+      <h2 id="joinRoomTitle">Join Room</h2>
+      <label for="joinNameInput">Your name</label>
+      <input id="joinNameInput" type="text" maxlength="24" placeholder="Player" autocomplete="nickname" />
+      <label for="joinRoomIdInput">Room ID</label>
+      <input id="joinRoomIdInput" type="text" maxlength="12" placeholder="Paste room ID from host" autocapitalize="off" autocomplete="off" />
+      <p id="joinRoomError" class="error-message" hidden></p>
+      <div class="mp-modal-actions">
+        <button id="joinRoomConfirmBtn" type="button" class="largeBtn accentBtn">Join Room</button>
+        <button id="joinRoomCancelBtn" type="button" class="secondaryBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="playSession" class="play-session" aria-hidden="true">
+    <div id="playRotate" class="play-rotate">
+      <div id="playFrame" class="play-frame">
+        <div id="ui" class="play-hud">
+          <header id="hudTop" class="hud-top">
+            <div id="controls" class="hud-controls">
+              <div id="timerInfo"></div>
+              <button id="pauseBtn" class="smallBtn hud-pause">Pause</button>
+            </div>
+          </header>
+          <div id="hudBody" class="hud-body">
+            <div id="playMain" class="play-main">
+              <canvas id="game"></canvas>
+            </div>
+            <aside id="scores" class="score-rail" aria-label="Army size per team"></aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pauseOverlay" style="display:none">
+    <div id="pauseBox">
+      <h2>PAUSED</h2>
+      <p class="pauseSubtext">The arena awaits your next move</p>
+      <div class="pauseActions">
+        <button id="resumeBtn" class="largeBtn">Resume</button>
+        <button id="restartBtn" class="largeBtn">Restart Battle</button>
+        <button id="pauseFullscreenBtn" class="secondaryBtn">Fullscreen</button>
+        <button id="quitBtn" class="secondaryBtn">Quit to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="gameOverOverlay" style="display:none">
+    <div id="gameOverBox">
+      <h2 id="gameOverTitle">VICTORY</h2>
+      <p id="gameOverMessage" class="gameOverMsg"></p>
+      <div class="pauseActions">
+        <button id="gameOverRestartBtn" class="largeBtn">Play Again</button>
+        <button id="gameOverQuitBtn" class="secondaryBtn">Back to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

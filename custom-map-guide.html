@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Liquid Wars - Custom Map Guide</title>
+  <link rel="stylesheet" href="css/style.css?v=5" />
+</head>
+<body class="info-page">
+  <main class="info-pageShell">
+    <section class="info-card" aria-labelledby="customMapGuideTitle">
+      <div class="info-hero">
+        <div>
+          <h1 id="customMapGuideTitle">Custom Map Guide</h1>
+          <p class="info-kicker">How to build a custom map and load it into the web version</p>
+        </div>
+        <div class="info-nav">
+          <a href="index.html" class="secondaryBtn">Back to Menu</a>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-section">
+          <h2>What the loader expects</h2>
+          <p>
+            The game reads the alpha channel of your collision image. Any pixel with visible alpha becomes a wall;
+            transparent pixels stay open. That means you can build a map with one image, or split it into a collision
+            mask plus a separate display image.
+          </p>
+        </div>
+
+        <div class="info-section">
+          <h2>Option 1: one image</h2>
+          <ol>
+            <li>Create a PNG with the walkable space fully transparent.</li>
+            <li>Paint the walls and solid obstacles with opaque pixels.</li>
+            <li>Use the same PNG as both the collision image and the display image.</li>
+          </ol>
+        </div>
+
+        <div class="info-section">
+          <h2>Option 2: two images</h2>
+          <ol>
+            <li>Create one PNG that is only the collision mask.</li>
+            <li>Create another PNG for the visual art or background.</li>
+            <li>Upload both files in the custom-map panel.</li>
+          </ol>
+        </div>
+
+        <div class="info-section">
+          <h2>Example file names</h2>
+          <ul>
+            <li><code>my-map-collision.png</code></li>
+            <li><code>my-map-display.png</code></li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <h2>Team colours</h2>
+          <p>
+            The game uses six fixed army colours. If you paint bases, lanes, or labels on your display image,
+            use these exact hex values so they match the teams on screen and in the menu.
+          </p>
+          <ul class="teamColourList" aria-label="Team colours and hex values">
+            <li><span class="teamSwatch" style="background:#00ff00" aria-hidden="true"></span><strong>Green</strong> (team 0) - <code>#00ff00</code></li>
+            <li><span class="teamSwatch" style="background:#2633ff" aria-hidden="true"></span><strong>Blue</strong> (team 1) - <code>#2633ff</code></li>
+            <li><span class="teamSwatch" style="background:#ff3333" aria-hidden="true"></span><strong>Red</strong> (team 2) - <code>#ff3333</code></li>
+            <li><span class="teamSwatch" style="background:#00ffff" aria-hidden="true"></span><strong>Cyan</strong> (team 3) - <code>#00ffff</code></li>
+            <li><span class="teamSwatch" style="background:#ffff00" aria-hidden="true"></span><strong>Yellow</strong> (team 4) - <code>#ffff00</code></li>
+            <li><span class="teamSwatch" style="background:#ff00ff" aria-hidden="true"></span><strong>Magenta</strong> (team 5) - <code>#ff00ff</code></li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <h2>Recommended setup</h2>
+          <ul>
+            <li>Use a wide image with a 16:9 aspect ratio if you want the cleanest result.</li>
+            <li>Keep key lanes and choke points easy to read at a glance.</li>
+            <li>Use separate art if you want the collision layout to stay simple.</li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <h2>How to load it in</h2>
+          <ol>
+            <li>Open the main menu or multiplayer lobby.</li>
+            <li>Pick <strong>Custom Map</strong> from the map dropdown.</li>
+            <li>Choose the collision image.</li>
+            <li>Optionally choose a second display image.</li>
+            <li>Start the battle, or let the host start in multiplayer.</li>
+          </ol>
+        </div>
+
+        <div class="info-section">
+          <p class="helpModalNote">
+            If you only upload one file, the game uses that same file for collisions and display.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
