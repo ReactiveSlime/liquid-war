@@ -1,53 +1,89 @@
-**Liquid Wars — Web Client (v7 - network)**
+# Liquid War
 
-- **Overview:** Browser-based remake of Liquid Wars. This site contains the UI, game loop, and multiplayer client that connects to the Node/Socket.IO server. The client is written as ES modules and imports the Socket.IO client from a CDN.
-- **Main behaviour:** Local single-player mode or multiplayer via the multiplayer server. Multiplayer uses a host-authoritative model: the host creates the room and broadcasts game state; other clients receive updates and send inputs (player positions, ready state).
+Liquid War is a fast-paced browser strategy game where you steer a liquid-like swarm of units across the arena, capture territory, and overwhelm the enemy team.
 
-**Quick Start (recommended)**
-- Serve the site files over HTTP (recommended):
-  - From `web/v7 - network` run a static server, for example:
+## Features
 
-    # Python 3
-    python -m http.server 8080
+- Single-player battles against the map and opposing teams.
+- Multiplayer rooms with host/join flow and room IDs.
+- Built-in map selection with preview.
+- Custom map support using a collision image, or a collision image plus a separate display image.
+- Pause, restart, fullscreen, and match timer options.
+- Sound effects for menu navigation and match outcomes.
 
-    # Or using npm (if installed globally)
-    npx http-server -p 8080
+## How To Play
 
-  - Then open: http://localhost:8080 (or open the `index.html` file directly in the browser—module imports may be blocked by some browsers when using file://)
+1. Open the game in a browser.
+2. Choose Single Player or Multiplayer from the title screen.
+3. Set your team, army size, timer, and map.
+4. Start the battle and guide your commander with the mouse or touch input.
+5. Win by converting enemy units and ending with the strongest force when the match ends.
 
-- **Server URL:** Default server URL is `http://localhost:3000` (see `js/app.js`). To point the client at a different server, set `window.LIQUID_WARS_SERVER_URL` before loading the page or edit `js/app.js`.
+## Controls
 
-**How the web client and server communicate**
-- The web client uses Socket.IO (client ESM from CDN) to connect to the multiplayer server. The client calls events such as `create-room`, `join-room`, `start-game`, `player-position`, and listens for `game-state-update`, `player-position`, `game-started`, etc. The server relays, coordinates rooms, and broadcasts messages to room members.
+- Desktop: move the mouse to direct your army.
+- Touch devices: drag your finger to steer.
+- Use the pause button to resume, restart, or quit to the menu.
 
-**Entry points & important files**
-- **index.html:** Main HTML shell and UI containers. See [web/v7 - network/index.html](web/v7%20-%20network/index.html#L1-L200)
-- **js/app.js:** Bootstraps the application, constructs `MultiplayerClient`, initializes UI and game loop. See [web/v7 - network/js/app.js](web/v7%20-%20network/js/app.js#L1-L200)
-- **js/multiplayer.js:** Socket.IO client wrapper; exposes high-level methods: `createRoom`, `joinRoom`, `updateSettings`, `startGame`, `sendGameState`, `sendPlayerPosition`, etc. See [web/v7 - network/js/multiplayer.js](web/v7%20-%20network/js/multiplayer.js#L1-L400)
-- **js/multiplayer-ui.js:** Connects `MultiplayerClient` events to DOM controls (create/join room dialogs, lobby, ready/start flow). See [web/v7 - network/js/multiplayer-ui.js](web/v7%20-%20network/js/multiplayer-ui.js#L1-L400)
-- **js/game.js:** Core game logic and host/client message handling (applyRemoteGameState, applyHostPlayerPosition, etc.). See [web/v7 - network/js/game.js](web/v7%20-%20network/js/game.js#L1-L200)
-- **js/state.js:** Holds client state (single vs multiplayer, running flags, mp host flag).
-- **js/render.js / js/input.js / js/layout.js:** Rendering, input capture and responsive layout helpers.
-- **js/map-normal.js / js/map-custom.js:** Built-in map handling and custom map file handling.
-- **js/config.js:** Key constants (team count, default sizes, MAP_COUNT). See [web/v7 - network/js/config.js](web/v7%20-%20network/js/config.js#L1-L80)
+## Running Locally
 
-**File responsibilities (short)**
-- `app.js` — bootstrap, wire multiplayer client to game, start main loop.
-- `multiplayer.js` — network client API: connection, room lifecycle, event wiring.
-- `multiplayer-ui.js` — UI for lobby, create/join flows, map sync, ready/start.
-- `ui-controller.js` / `ui.js` — DOM overlays, HUD, in-game controls.
-- `game.js` / `state.js` / `render.js` — game engine logic and drawing.
-- `map-custom.js` — reads user-supplied collision/display images and converts to data URLs to send to host/players.
+This project is a static site with ES modules, so it should be served over HTTP rather than opened directly with `file://`.
 
-**Start sequence (typical)**
-1. Start the server (see server/README.md). Default server: `http://localhost:3000`.
-2. Serve the web folder (see Quick Start above) and open the page in the browser.
-3. Use the UI to: select Multiplayer → Create Room (host) or Join Room (client).
-4. Host updates settings and starts the match. Host then broadcasts game snapshots to clients.
+Any simple local web server works. For example:
 
-**Notes & common pitfalls**
-- `index.html` loads JS modules; serving over HTTP is recommended to avoid CORS/ESM restrictions in some browsers.
-- The server helper scripts (`start-server.bat` and `start-server.ps1`) reference older paths in their output text in places (for example they mention `web/v5 - multiplayer/index.html`). Open `web/v7 - network/index.html` instead in this workspace.
-- Custom maps are transmitted as data URLs (base64) via `sync-custom-map` events — large files may be slow to transfer.
+```bash
+python -m http.server 8000
+```
 
-If you want I can also add a small `serve` npm script or an example `docker-compose` to launch both the web static server and the Node server together.
+Then open `http://localhost:8000` and load `index.html`.
+
+## Multiplayer
+
+Multiplayer connects to a Liquid War server endpoint. The game loads the server list from `servers.json` and automatically picks a server to connect to.
+
+- Create a room to host a match.
+- Share the room ID with other players.
+- Join a room using the host's room ID.
+- Use the custom server option if you want to point the game at another compatible server.
+
+## Custom Maps
+
+Custom maps are built from image files.
+
+- Opaque pixels become walls.
+- Transparent pixels stay open.
+- You can use one image for both collision and display, or upload a collision image plus a separate display image.
+
+See [custom-map-guide.html](custom-map-guide.html) for the full workflow.
+
+## Help Pages
+
+- [How to Play](how-to-play.html)
+- [Custom Map Guide](custom-map-guide.html)
+- [Credits](credits.html)
+
+## Credits
+
+Sources and inspirations behind this remake:
+
+- Menu sound effect by [LIECIO](https://pixabay.com/users/liecio-3298866/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=190020) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=190020)
+- Win sound effect by [u_3bsnvt0dsu](https://pixabay.com/users/u_3bsnvt0dsu-48554563/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=295086) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=295086)
+- Lose sound effect by [u_8g40a9z0la](https://pixabay.com/users/u_8g40a9z0la-45586904/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=234710) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=234710)
+- Map and inspirations from [github.com/DerGoogler/liquid-wars](https://github.com/DerGoogler/liquid-wars)
+
+The rest of the interface, assets, and implementation are part of this remake.
+
+## Project Structure
+
+- `index.html` - main game shell and menus
+- `css/` - styling
+- `js/` - game logic, UI, rendering, multiplayer, and input handling
+- `audio/` - sound effects
+- `maps/` - built-in map assets
+
+## Notes
+
+- The game uses plain HTML, CSS, and JavaScript.
+- There is no build step in this repository.
+- Multiplayer depends on a compatible backend server.
+
