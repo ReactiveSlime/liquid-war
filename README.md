@@ -2,6 +2,8 @@
 
 Liquid War is a fast-paced browser strategy game where you steer a liquid-like swarm of units across the arena, capture territory, and overwhelm the enemy team.
 
+Play the game online: [https://liquid-war.reactivesli.me/](https://liquid-war.reactivesli.me/)
+
 ## Features
 
 - Single-player battles against the map and opposing teams.
